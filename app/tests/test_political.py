@@ -19,6 +19,23 @@ class PoliticalTests(BaseTests):
         response = self.client().get('/api/v2/party',
                                      content_type='application/json')
         self.assertEqual(response.status_code, 200)
+    def test_get_specific_by_id(self):
+        """Tests API can get a specific party by using its id"""
+        self.client().post('/api/v2/party', data=self.add_party,
+                           content_type='application/json')
+        response = self.client().get('/api/v2/party/1',
+                                     content_type='application/json',
+                                     )
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_wrong_political_party(self):
+        self.client().get('/api/v2/party', data=self.add_party,
+                           content_type='application/json')
+        response = self.client().get('/api/v2/party/10',
+                                     content_type='application/json',
+                                     )
+        self.assertEqual(response.status_code, 404)
+
 
 
 if __name__ == '__main__':

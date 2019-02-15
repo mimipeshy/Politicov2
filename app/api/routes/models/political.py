@@ -53,3 +53,24 @@ class PoliticalParty:
 
             allparties.append(oneparty)
         return jsonify({"Parties": allparties})
+
+    @staticmethod
+    def get_one_party(id):
+        """this returns one specific party"""
+        parties = []
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM party WHERE id = %s """ % id)
+        data = cur.fetchall()
+        if not data:
+            return jsonify({"Message": "Party does not exist"}), 404
+        for party in data:
+            item = {
+                "id": party[0],
+                "name": party[1],
+                "hqAddress": party[2],
+                "logoUrl": party[3]
+            }
+            parties.append(item)
+            return Responses.complete_response(parties)
+        conn.commit()
+        return parties
