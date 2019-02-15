@@ -33,3 +33,23 @@ class PoliticalParty:
         result = cursor.fetchone()
         conn.commit()
         return result
+
+    @staticmethod
+    def get_all_parties():
+        """this returns all parties"""
+        cursor = conn.cursor()
+        sql = "SELECT * FROM party"
+        cursor.execute(sql)
+        parties = cursor.fetchall()
+        if not parties:
+            return jsonify({"Message": "No created parties"}), 404
+        allparties = []
+        for party in parties:
+            oneparty = {}
+            oneparty["id"] = party[0]
+            oneparty["name"] = party[1]
+            oneparty["hqAddress"] = party[2]
+            oneparty["logoUrl"] = party[3]
+
+            allparties.append(oneparty)
+        return jsonify({"Parties": allparties})
