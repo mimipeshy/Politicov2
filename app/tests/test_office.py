@@ -24,6 +24,23 @@ class PoliticalOfficeTests(BaseTests):
                                      content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
+    def test_get_specific_office_by_id(self):
+        """Tests API can get a specific party by using its id"""
+        self.client().post('/api/v2/office', data=self.add_office,
+                           content_type='application/json')
+        response = self.client().get('/api/v2/office/1',
+                                     content_type='application/json',
+                                     )
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_office_forbidden(self):
+        self.client().post('/api/v2/office', data=self.add_office,
+                           content_type='application/json')
+        response = self.client().get('/api/v2/office/10',
+                                     content_type='application/json',
+                                     )
+        self.assertEqual(response.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()

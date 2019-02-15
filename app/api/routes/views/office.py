@@ -26,3 +26,9 @@ def get_all_offices():
     """this returns all offices"""
 
     return ofisi.get_all_offices()
+
+
+@version2.route("/office/<int:id>", methods=['GET'])
+def get_one_office(id):
+    """this gets one specific office"""
+    return ofisi.get_one_office(id)
