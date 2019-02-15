@@ -88,3 +88,22 @@ class PoliticalParty:
             cur.execute("""UPDATE party SET name = '{}'""".format(name))
             return make_response(jsonify({"Message": "Update successful"}))
         return make_response(jsonify({"Message": "Update failed"}), 404)
+
+    @staticmethod
+    def delete_party(id):
+        """this deletes a party"""
+        cur = conn.cursor()
+        sql = """DELETE FROM party WHERE id = %(id)s"""
+        data = {"id": int(id)}
+        cur.execute(sql, data)
+        conn.commit()
+
+    @staticmethod
+    def find_party_by_id(id):
+        """this gets a party by id"""
+        cur = conn.cursor()
+        sql = """SELECT * FROM party WHERE id = '{0}'""".format(id)
+        cur.execute(sql)
+        result = cur.fetchone()
+        conn.commit()
+        return result
