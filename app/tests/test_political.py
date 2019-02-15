@@ -52,7 +52,6 @@ class PoliticalTests(BaseTests):
                                        )
         self.assertEqual(response.status_code, 404)
 
-
     def test_delete_non_existing_party(self):
         response = self.client().delete('/api/v2/party/e',
                                         content_type='application/json',
