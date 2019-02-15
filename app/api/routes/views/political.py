@@ -38,7 +38,12 @@ def create_political_party():
         "id": party[0],
         "Status": "OK",
         "Message": "Party created successfully",
-        "Party Details":  party[1],
-        "hqAddress":  party[2],
-        "logoUrl":  party[3]
+        "Party Details": party[1],
+        "hqAddress": party[2],
+        "logoUrl": party[3]
     }), 201)
+
+
+@version2.route("/party", methods=['GET'])
+def get_all_parties():
+    return p.get_all_parties()
