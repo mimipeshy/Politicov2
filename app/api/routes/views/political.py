@@ -47,3 +47,8 @@ def create_political_party():
 @version2.route("/party", methods=['GET'])
 def get_all_parties():
     return p.get_all_parties()
+
+
+@version2.route("/party/<int:party_id>", methods=['GET'])
+def get_one_party(party_id):
+    return p.get_one_party(party_id)
