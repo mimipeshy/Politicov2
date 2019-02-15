@@ -32,3 +32,23 @@ class GovernmentOffice:
         cursor.execute(sql)
         result = cursor.fetchone()
         return result
+
+    @staticmethod
+    def get_all_offices():
+        """this gets all offices"""
+        cursor = conn.cursor()
+        sql = """SELECT * FROM office"""
+        cursor.execute(sql)
+        offices = cursor.fetchall()
+        if not offices:
+            return jsonify({"message": "no created offices"}), 404
+        alloffices = []
+        for office in offices:
+            oneoffice = {}
+            oneoffice["id"] = office[0]
+            oneoffice["name"] = office[1]
+            oneoffice["type"] = office[2]
+            alloffices.append(oneoffice)
+            # conn.commit()
+            print(office[0])
+        return jsonify({"All offices": alloffices})

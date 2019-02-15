@@ -10,12 +10,19 @@ from app.api.utils import Validations
 def create_an_office():
     """this creates a new office"""
     data = request.get_json()
-    valid= Validations.create_office()
+    valid = Validations.create_office()
     if valid:
         return Validations.create_office()
     name = data['name']
     type = data['type']
     final = ofisi(name, type)
     response = final.add_political_office(name, type)
-    result = [{"id": response[0], "name":response[1], "type":response[2]}]
+    result = [{"id": response[0], "name": response[1], "type": response[2]}]
     return jsonify({"msg": result}), 201
+
+
+@version2.route("/office", methods=['GET'])
+def get_all_offices():
+    """this returns all offices"""
+
+    return ofisi.get_all_offices()
