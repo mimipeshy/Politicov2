@@ -20,19 +20,19 @@ def error404(e):
 
 
 @app.errorhandler(405)
-def error404(e):
+def error405(e):
     return make_response(jsonify({"Status": 405,
                                   "Data": "The method is not allowed for the requested URL".format(e)}), 405)
 
 
 @app.errorhandler(403)
-def error404(e):
+def error403(e):
     return make_response(jsonify({"Status": 403,
                                   "Data": "This method is not allowed".format(e)}), 403)
 
 
 @app.errorhandler(500)
-def error404(e):
+def error500(e):
     return make_response(jsonify({"Status": 500,
                                   "Data": "Internal Server Error".format(e)}), 500)
 
