@@ -52,3 +52,21 @@ class GovernmentOffice:
             # conn.commit()
             print(office[0])
         return jsonify({"All offices": alloffices})
+
+    @staticmethod
+    def get_one_office(id):
+        """this gets one office details"""
+        offices = []
+        cur = conn.cursor()
+        cur.execute("""SELECT * FROM office WHERE office_id = %s """ % id)
+        data = cur.fetchall()
+        if not data:
+            return jsonify({"msg": "No offices created yet"}), 404
+        for office in data:
+            item = {
+                "office_id": office[0],
+                "name": office[1],
+                "type": office[2]
+            }
+            offices.append(item)
+        return jsonify({"msg": offices})
