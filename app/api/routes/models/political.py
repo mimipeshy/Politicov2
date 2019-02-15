@@ -74,3 +74,17 @@ class PoliticalParty:
             return Responses.complete_response(parties)
         conn.commit()
         return parties
+
+    @staticmethod
+    def update_party(id):
+        """this edits a party name"""
+        partyid = id
+        data = request.get_json()
+        name = data['name']
+        cur = conn.cursor()
+        cur.execute("""SELECT id FROM party WHERE id = {}""".format(id))
+        row = cur.fetchone()
+        if row:
+            cur.execute("""UPDATE party SET name = '{}'""".format(name))
+            return make_response(jsonify({"Message": "Update successful"}))
+        return make_response(jsonify({"Message": "Update failed"}), 404)

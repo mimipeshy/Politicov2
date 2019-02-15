@@ -52,3 +52,8 @@ def get_all_parties():
 @version2.route("/party/<int:party_id>", methods=['GET'])
 def get_one_party(party_id):
     return p.get_one_party(party_id)
+
+
+@version2.route("/party/<int:party_id>/name", methods=['PATCH'])
+def get_update_party(party_id):
+    return p.update_party(party_id)
