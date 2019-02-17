@@ -75,14 +75,13 @@ def create_tables():
 
 
 def drop_tables():
-    db_test_url = os.getenv('DATABASE_TEST_URL')
+    db_test_url = os.getenv('DATABASE_URL')
     connection = psycopg2.connect(db_test_url)
     cursor = connection.cursor()
     users = """DROP TABLE IF EXISTS users CASCADE"""
     blacklist = """DROP TABLE IF EXISTS blacklist CASCADE"""
     party = """DROP TABLE IF EXISTS party CASCADE"""
     office = """DROP TABLE IF EXISTS office CASCADE"""
-
     queries = [users, blacklist, party, office]
     try:
         for query in queries:

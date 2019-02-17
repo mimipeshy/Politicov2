@@ -16,9 +16,8 @@ class Validations:
         name = data['name'].strip()
         hqAddress = data['hqAddress'].strip()
         logoUrl = data['logoUrl'].strip()
-
         if len(name) == 0:
-            return Responses.bad_request("Party Name cannot be empty"), 400
+                return Responses.bad_request("Name cannot be empty"), 400
         if len(hqAddress) == 0:
             return Responses.bad_request("hqAddress name cannot be empty"), 400
         if len(logoUrl) == 0:
