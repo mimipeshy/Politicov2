@@ -38,3 +38,21 @@ class Responses:
             'Data': message
         }))
         return response
+
+
+class AuthResponses:
+    """For authentication with token"""
+
+    @staticmethod
+    def create_user(message, token):
+        response = jsonify({"status": "User Created",
+                            "message": message,
+                            "access_token": token})
+        return make_response(response), 201
+
+    @staticmethod
+    def complete_request(message, token):
+        response = jsonify({"status": "OK",
+                            "message": message,
+                            "access_token": token})
+        return make_response(response), 200

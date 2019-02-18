@@ -40,7 +40,8 @@ Use pytest to run: `pytest --cov=app`
 | PATCH /api/v2/party/<int:id>/name       | UPDATE ONE political party         |                                                                   
 | POST  /api/v2/office                    | CREATE government office           |                                     
 | GET  /api/v2/office/<int:id>            | GET ONE government office          |                                                                  
-| GET  /api/v2/office                     | GET ALL government offices         |                                                                  
+| GET  /api/v2/office                     | GET ALL government offices         |  
+| POST  /api/v2/auth/signup               | CREATE  a new user                 |                                                                
 
 
 # How to run endpoints in postman

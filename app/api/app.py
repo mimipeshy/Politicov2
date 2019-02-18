@@ -6,7 +6,7 @@ from config import app_config
 from app.api.database.db_conn import create_tables
 from app.api.routes.views.political import version2 as party
 from app.api.routes.views.office import version2 as office
-
+from app.api.routes.views.auth import version2 as auth
 
 
 def create_app(config_name):
@@ -16,4 +16,5 @@ def create_app(config_name):
         create_tables()
     app.register_blueprint(party)
     app.register_blueprint(office)
+    app.register_blueprint(auth)
     return app
