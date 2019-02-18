@@ -95,6 +95,5 @@ class BaseTests(unittest.TestCase):
 
         })
 
-def tearDown(self):
-        with self.app.app_context():
-            drop_tables()
+    def tearDown(self):
+        drop_tables()

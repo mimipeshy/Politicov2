@@ -1,9 +1,8 @@
-from flask import jsonify, make_response, request
-from app.api.responses import Responses
+from flask import jsonify, request
 
 from app.api.blueprints import version2
 from app.api.routes.models.office import GovernmentOffice as ofisi
-from app.api.utils import Validations
+from app.api.validations.utils import Validations
 
 
 @version2.route("/office", methods=['POST'])
@@ -13,6 +12,7 @@ def create_an_office():
     valid = Validations.create_office()
     if valid:
         return Validations.create_office()
+
     name = data['name']
     type = data['type']
     final = ofisi(name, type)

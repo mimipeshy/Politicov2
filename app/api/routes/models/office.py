@@ -14,6 +14,7 @@ class GovernmentOffice:
         self.id = len(offices) + 1
         self.name = name
         self.type = type
+
     def add_political_office(self, name, type):
         """this saves political office data"""
         cursor = conn.cursor()
@@ -44,13 +45,8 @@ class GovernmentOffice:
             return jsonify({"message": "no created offices"}), 404
         alloffices = []
         for office in offices:
-            oneoffice = {}
-            oneoffice["id"] = office[0]
-            oneoffice["name"] = office[1]
-            oneoffice["type"] = office[2]
+            oneoffice = {"id": office[0], "name": office[1], "type": office[2]}
             alloffices.append(oneoffice)
-            # conn.commit()
-            print(office[0])
         return jsonify({"All offices": alloffices})
 
     @staticmethod

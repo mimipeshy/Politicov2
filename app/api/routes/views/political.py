@@ -2,7 +2,7 @@ from flask import request, jsonify, make_response
 
 from app.api.blueprints import version2
 from app.api.routes.models.political import PoliticalParty as p
-from app.api.utils import Validations
+from app.api.validations.utils import Validations
 
 parties = []
 
