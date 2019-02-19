@@ -58,6 +58,14 @@ def create_tables():
         name VARCHAR(80) NOT NULL,
         type VARCHAR(80) NOT NULL
         )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS votes (
+        office_id SERIAL PRIMARY KEY NOT NULL,
+        office VARCHAR(80) NOT NULL,
+        candidate VARCHAR(80) NOT NULL,
+        voter INTEGER NOT NULL UNIQUE
+        )
         """
     )
     try:
@@ -83,7 +91,8 @@ def drop_tables():
     blacklist = """DROP TABLE IF EXISTS blacklist CASCADE"""
     party = """DROP TABLE IF EXISTS party CASCADE"""
     office = """DROP TABLE IF EXISTS office CASCADE"""
-    queries = [users, blacklist, party, office]
+    votes= """DROP TABLE IF EXISTS votes CASCADE"""
+    queries = [users, blacklist, party, office, votes]
     try:
         for query in queries:
             cursor.execute(query)

@@ -1,4 +1,5 @@
 import re
+from os import abort
 
 from flask import request, jsonify
 
@@ -6,6 +7,7 @@ from app.api.responses import Responses
 from app.api.routes.models.political import PoliticalParty as p
 from urllib.parse import urlparse
 from app.api.routes.models.office import GovernmentOffice as g
+
 
 class Validations:
 
@@ -17,7 +19,7 @@ class Validations:
         hqAddress = data['hqAddress'].strip()
         logoUrl = data['logoUrl'].strip()
         if len(name) == 0:
-                return Responses.bad_request("Name cannot be empty"), 400
+            return Responses.bad_request("Name cannot be empty"), 400
         if len(hqAddress) == 0:
             return Responses.bad_request("hqAddress name cannot be empty"), 400
         if len(logoUrl) == 0:
@@ -133,3 +135,8 @@ class Validations:
         office_exist = g.find_office_by_name(name)
         if office_exist:
             return Responses.bad_request({"Message": "Sorry, the office already exists"}), 404
+
+    @staticmethod
+    def validate_admin(email):
+        if email != "tevinthuku@gmail.com":
+            abort(Responses.bad_request("You are not an admin"))

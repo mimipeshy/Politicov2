@@ -6,6 +6,7 @@ from app.api.routes.models.user import UserModel as u
 import app.api.validation as validate
 import app.api.validations.common as tokens
 
+
 @version2.route("/auth/signup", methods=['POST'])
 def register_new_user():
     """this class registers a new user"""
@@ -39,6 +40,3 @@ def register_new_user():
     access_token = tokens.generate_token(user_id)
     return make_response(jsonify({"Data": "User {} registered".format(email),
                                   "token": access_token.decode()}))
-
-
-
