@@ -38,16 +38,9 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS blacklist (
-            id SERIAL PRIMARY KEY NOT NULL,
-            tokens CHARACTER VARYING(255) NOT NULL,
-            blacklisted_date TIMESTAMP WITH TIME ZONE DEFAULT ('now'::text)::date NOT NULL
-        )
-        """,
-        """
         CREATE TABLE IF NOT EXISTS party (
             id SERIAL PRIMARY KEY NOT NULL,
-            name VARCHAR(80) NOT NULL,
+            name VARCHAR(80) NOT NULL UNIQUE,
             hqAddress VARCHAR(150) NOT NULL,
             logoUrl VARCHAR(80) NOT NULL
         )
@@ -55,8 +48,25 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS office (
         office_id SERIAL PRIMARY KEY NOT NULL,
-        name VARCHAR(80) NOT NULL,
+        name VARCHAR(80) NOT NULL UNIQUE,
         type VARCHAR(80) NOT NULL
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS votes (
+        id SERIAL,
+        office INTEGER,
+        candidate INTEGER,
+        voter INTEGER,
+        PRIMARY KEY (office, voter)
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS candidate(
+         id SERIAL,
+         candidate INTEGER,
+         office INTEGER,
+         PRIMARY KEY (office, candidate)      
         )
         """
     )
@@ -83,7 +93,8 @@ def drop_tables():
     blacklist = """DROP TABLE IF EXISTS blacklist CASCADE"""
     party = """DROP TABLE IF EXISTS party CASCADE"""
     office = """DROP TABLE IF EXISTS office CASCADE"""
-    queries = [users, blacklist, party, office]
+    votes= """DROP TABLE IF EXISTS votes CASCADE"""
+    queries = [users, blacklist, party, office, votes]
     try:
         for query in queries:
             cursor.execute(query)

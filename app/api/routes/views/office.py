@@ -1,7 +1,11 @@
+from os import abort
+
 from flask import jsonify, request
 
 from app.api.blueprints import version2
+from app.api.responses import Responses
 from app.api.routes.models.office import GovernmentOffice as ofisi
+from app.api.routes.models.user import UserModel as u
 from app.api.validations.utils import Validations
 
 
@@ -32,3 +36,6 @@ def get_all_offices():
 def get_one_office(id):
     """this gets one specific office"""
     return ofisi.get_one_office(id)
+
+
+
