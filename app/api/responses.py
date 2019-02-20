@@ -56,3 +56,38 @@ class AuthResponses:
                             "message": message,
                             "access_token": token})
         return make_response(response), 200
+class BadRequest(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Bad Request",
+                                              "message": message}), 400)
+
+
+class Unauthorized(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Unauthorized",
+                                              "message": message}), 401)
+
+
+class ForbiddenAction(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Forbidden Action",
+                                              "message": message}), 403)
+
+
+class NotFound(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Not Found",
+                                              "message": message}), 404)
+
+
+class Conflict(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Conflict",
+                                              "message": message}), 409)
+
+
+class InternalServerError(Exception):
+    def __init__(self, message):
+        self.message = make_response(jsonify({"status": "Internal Server Error",
+                                              "message": message}), 500)
+

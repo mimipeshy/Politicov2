@@ -1,4 +1,5 @@
 from flask import request, jsonify, make_response
+from flask_jwt_extended import jwt_required
 
 from app.api.blueprints import version2
 from app.api.routes.models.political import PoliticalParty as p
@@ -8,6 +9,7 @@ parties = []
 
 
 @version2.route("/party", methods=['POST'])
+@jwt_required
 def create_political_party():
     """this creates a new political party"""
 
@@ -45,19 +47,25 @@ def create_political_party():
 
 
 @version2.route("/party", methods=['GET'])
+@jwt_required
 def get_all_parties():
     return p.get_all_parties()
 
 
 @version2.route("/party/<int:party_id>", methods=['GET'])
+@jwt_required
 def get_one_party(party_id):
     return p.get_one_party(party_id)
 
 
 @version2.route("/party/<int:party_id>/name", methods=['PATCH'])
+@jwt_required
 def get_update_party(party_id):
     return p.update_party(party_id)
+
+
 @version2.route("/party/<int:party_id>", methods=['DELETE'])
+@jwt_required
 def delete_specific_party(party_id):
     data = p.find_party_by_id(party_id)
     if data:

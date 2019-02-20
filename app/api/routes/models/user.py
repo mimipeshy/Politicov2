@@ -1,9 +1,12 @@
-from flask import jsonify
+from datetime import datetime, timedelta
+
+import jwt
+from flask import jsonify, current_app
 from app.api.database.db_conn import dbconn
-import app.api.validation as validate
+import app.api.validations.validation as validate
+import app.api.responses as errors
 
 conn = dbconn()
-users = []
 
 
 class UserModel:
@@ -18,18 +21,18 @@ class UserModel:
         self.othername = other_name
         self.phone = phone
         self.passport = passportUrl
+        print(self.password_hash)
 
-    def save(self, first_name, last_name, other_name, email, password_hash, phone, passportUrl, is_admin):
+    def save(self, is_admin):
         """this adds a new user"""
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO users(fname,lname, othername,email,phone,password,passUrl,is_admin) VALUES(%s,%s,%s,%s,%s,"
             "%s,%s,%s)", (
-                first_name, last_name, other_name, email, phone, self.password_hash, passportUrl, is_admin)
+                self.fname, self.lname, self.othername, self.email, self.phone, self.password_hash, self.passport, is_admin)
         )
         cursor.execute("SELECT user_id FROM users WHERE email = %s", (self.email,))
         row = cursor.fetchone()
-        self.id = row[0]
         conn.commit()
 
     @staticmethod
@@ -48,6 +51,16 @@ class UserModel:
         cur = conn.cursor()
         sql = """SELECT * FROM users WHERE user_id = '{}'""".format(user_id)
         cur.execute(sql)
+        result = cur.fetchone()
+        conn.commit()
+        return result
+
+    @staticmethod
+    def fetch_user_id(email):
+        """Method returns the user's id by querying the email"""
+        cur = conn.cursor()
+        query = """SELECT user_id FROM users WHERE email='{}'""" .format(email)
+        cur.execute(query)
         result = cur.fetchone()
         conn.commit()
         return result
@@ -96,3 +109,4 @@ class UserModel:
         row = cur.fetchone()
         cur.close()
         return row
+

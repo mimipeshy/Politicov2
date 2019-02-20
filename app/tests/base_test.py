@@ -94,6 +94,64 @@ class BaseTests(unittest.TestCase):
             "logoUrl": "http://mdoossd.com/pol.ko"
 
         })
+        self.add_new_user= json.dumps({
+            "first_name":"test",
+            "last_name":"testname",
+            "other_name":"testother",
+            "email":"test@gmail.com",
+            "phone":"1234",
+            "password":"testing",
+            "passportUrl":"pic/jpg",
+            "is_admin":"False"
 
-    def tearDown(self):
-        drop_tables()
+        })
+        self.login= json.dumps({
+            "email":"test@gmail.com",
+            "password":"testing"
+        })
+        # self.header = {"content-type": "application/json"}
+        # # login the admin
+        # response = self.client().post("/api/v2/auth/login", data=json.dumps(self.login), headers=self.header)
+        # # create the authentication headers
+        # self.authHeaders = {"content-type": "application/json"}
+        # # put the bearer token in the header
+        # result = json.loads(response.data.decode())
+        # print({"nvjnfvjndivnd": result})
+        # self.authHeaders['Authorization'] = 'Bearer ' + result['token']
+
+    def register_user(self, first_name, last_name, other_name, email, phone, password, passportUrl, is_admin):
+        """Register user with dummy data"""
+        return self.client().post(
+            '/api/v2/auth/signup',
+            data= json.dumps (dict(
+                first_name = first_name,
+                last_name = last_name,
+                other_name = other_name,
+                email= email,
+                phone= phone,
+                password= password,
+                passportUrl= passportUrl,
+                is_admin= is_admin
+            )))
+
+
+    def login_user(self, email, password):
+        """Register user with dummy data"""
+        return self.client().post(
+            '/api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(dict(
+                email=email,
+                password=password)))
+
+    def user_token_get(self):
+        self.register_user(first_name="peris",last_name="ndanu",other_name="kimeu",email="perisndanu@gmail.com",password="South@frica1",phone="1234567890",passportUrl="pic/jpg",is_admin=True)
+        data = self.login_user(email="perisndanu@gmail.com", password="South@frica1")
+        access_token = json.loads(data.data.decode())['token']
+        print(access_token)
+        # return access_token
+
+    # def tearDown(self):
+    #     drop_tables()
+
+

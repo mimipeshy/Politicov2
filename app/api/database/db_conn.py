@@ -5,7 +5,8 @@ import os
 
 import psycopg2
 import psycopg2.extras
-from flask import current_app
+from psycopg2.extras import RealDictCursor
+
 
 
 def dbconn():
@@ -22,6 +23,7 @@ def dbconn():
 def create_tables():
     """
     Create tables for the database
+
     """
     queries = (
         """
@@ -63,13 +65,16 @@ def create_tables():
         """,
         """
         CREATE TABLE IF NOT EXISTS candidate(
-         id SERIAL,
+         id SERIAL PRIMARY KEY,
          candidate INTEGER,
          office INTEGER,
-         PRIMARY KEY (office, candidate)      
+         FOREIGN KEY (candidate) REFERENCES users(user_id) ON DELETE CASCADE,
+         UNIQUE(candidate)
+         
         )
         """
     )
+
     try:
         connection = dbconn()
         cursor = connection.cursor()
@@ -84,7 +89,6 @@ def create_tables():
     except psycopg2.DatabaseError as e:
         print(e)
 
-
 def drop_tables():
     db_test_url = os.getenv('DATABASE_URL')
     connection = psycopg2.connect(db_test_url)
@@ -93,12 +97,14 @@ def drop_tables():
     blacklist = """DROP TABLE IF EXISTS blacklist CASCADE"""
     party = """DROP TABLE IF EXISTS party CASCADE"""
     office = """DROP TABLE IF EXISTS office CASCADE"""
-    votes= """DROP TABLE IF EXISTS votes CASCADE"""
-    queries = [users, blacklist, party, office, votes]
+    votes = """DROP TABLE IF EXISTS votes CASCADE"""
+    candidate = """DROP TABLE IF EXISTS candidate CASCADE"""
+    queries = [users, blacklist, party, office, votes, candidate]
     try:
         for query in queries:
             cursor.execute(query)
 
         connection.commit()
+        connection.close()
     except psycopg2.DatabaseError as e:
         print(e)

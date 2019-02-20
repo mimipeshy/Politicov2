@@ -8,8 +8,13 @@ from app.api.routes.models.political import PoliticalParty as p
 from urllib.parse import urlparse
 from app.api.routes.models.office import GovernmentOffice as g
 
+def check_password_hash(password_hash, password):
+    print("kkkkkkkkk")
+    return check_password_hash(password_hash, (password))
 
 class Validations:
+
+
 
     @staticmethod
     def verify_political_details():
@@ -138,5 +143,5 @@ class Validations:
 
     @staticmethod
     def validate_admin(email):
-        if email != "tevinthuku@gmail.com":
+        if email != "peris@gmail.com":
             abort(Responses.bad_request("You are not an admin"))

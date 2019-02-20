@@ -12,6 +12,7 @@ class DevelopmentConfig(Config):
     """Configurations for Development."""
     DEBUG = True
     TESTING = True
+    JWT_SECRET_KEY = "sijuiaki"
 
 
 class TestingConfig(Config):
@@ -19,12 +20,14 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
     DATABASE_NAME = "testpolitico"
+    JWT_SECRET_KEY = "sijuiaki"
 
 
 class ProductionConfig(Config):
     """Configurations for Production."""
     DEBUG = False
     TESTING = False
+    JWT_SECRET_KEY = "sijuiaki"
 
 
 app_config = {'development': DevelopmentConfig,
