@@ -43,7 +43,7 @@ def register_new_user():
     user_id = user.save(is_admin)
     token = create_access_token(identity=email)
     return make_response(jsonify({"Data": "User {} registered".format(email),
-                                  "token": token}))
+                                  "token": token}),201)
 
 
 @version2.route("/auth/login", methods=['POST'])

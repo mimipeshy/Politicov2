@@ -11,6 +11,7 @@ from app.api.database.db_conn import dbconn, drop_tables, create_tables
 
 conn = dbconn()
 
+
 class BaseTests(unittest.TestCase):
     """This class represents the base configurations for all tests"""
 
@@ -21,6 +22,13 @@ class BaseTests(unittest.TestCase):
         self.conn = psycopg2.connect(os.getenv('DATABASE_URL'))
         with self.app.app_context():
             create_tables()
+            # admin = self.client().post("api/v2/auth/login",
+            #                          data=json.dumps({
+            #                              "email": "ndani@gmail.com",
+            #                              "password": "South@frica12*"
+            #                          }),
+            #                          content_type="application/json")
+            # self.ADMIN_TOKEN = json.loads(admin.data.decode['utf-8'])('token')
 
         self.add_party = json.dumps({
             "name": "maendeleo",
@@ -80,6 +88,10 @@ class BaseTests(unittest.TestCase):
             "is_admin": "TRUE"
 
         }
+        self.login_user = {
+            "email": "ndani@gmail.com",
+            "password": "South@frica12*"
+        }
         self.missing_http = json.dumps({
             "name": "erttmommk",
             "hqAddress": "kokmokoo",
@@ -105,11 +117,23 @@ class BaseTests(unittest.TestCase):
 
         })
 
+    def test_user_login(self):
+        """this checks a user for login"""
+        self.client().post('/api/v2/auth/signup', data=self.register_user,
+                           content_type='application/json',
+                           )
+        response = self.client().post('/api/v2/office/login', data=self.login_user,
+                                      content_type='application/json',
+                                      )
+        self.assertEqual(response.status_code, 200)
+        access_token= json.loads(response.data.decode['utf-8']).get('token')
+        return access_token
+
 
 
     def tearDown(self):
         drop_tables()
 
-    # def tearDown(self):
-    #     print("nfdfndifdifdi")
-    #     drop_tables()
+if __name__ == '__main__':
+    unittest.main()
+

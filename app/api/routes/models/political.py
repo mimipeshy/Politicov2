@@ -22,7 +22,7 @@ class PoliticalParty:
                 name, hqAddress, logoUrl)
         )
         conn.commit()
-        conn.close()
+
         return PoliticalParty.find_party_by_name(name)
 
     @staticmethod
@@ -33,7 +33,7 @@ class PoliticalParty:
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()
-        conn.close()
+
         return result
 
     @staticmethod
@@ -75,7 +75,6 @@ class PoliticalParty:
             parties.append(item)
             return Responses.complete_response(parties)
         conn.commit()
-        conn.close()
         return parties
 
     @staticmethod
@@ -100,7 +99,7 @@ class PoliticalParty:
         data = {"id": int(id)}
         cur.execute(sql, data)
         conn.commit()
-        conn.close()
+
 
     @staticmethod
     def find_party_by_id(id):
@@ -110,5 +109,5 @@ class PoliticalParty:
         cur.execute(sql)
         result = cur.fetchone()
         conn.commit()
-        conn.close()
+
         return result

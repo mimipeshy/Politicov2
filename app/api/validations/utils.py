@@ -138,5 +138,5 @@ class Validations:
 
     @staticmethod
     def validate_admin(email):
-        if email != "tevinthuku@gmail.com":
+        if email != "peris@gmail.com":
             abort(Responses.bad_request("You are not an admin"))

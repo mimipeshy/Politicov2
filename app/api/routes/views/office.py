@@ -2,13 +2,14 @@ from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 
 from app.api.blueprints import version2
+from app.api.responses import Responses
 from app.api.routes.models.candidate import Candidates as c
 from app.api.routes.models.office import GovernmentOffice as ofisi
 from app.api.validations.utils import Validations
 
 
 @version2.route("/office", methods=['POST'])
-# @jwt_required
+@jwt_required
 def create_an_office():
     """this creates a new office"""
     data = request.get_json()
@@ -24,7 +25,7 @@ def create_an_office():
 
 
 @version2.route("/office", methods=['GET'])
-# @jwt_required
+@jwt_required
 def get_all_offices():
     """this returns all offices"""
 
@@ -32,7 +33,7 @@ def get_all_offices():
 
 
 @version2.route("/office/<int:id>", methods=['GET'])
-# @jwt_required
+@jwt_required
 def get_one_office(id):
     """this gets one specific office"""
     return ofisi.get_one_office(id)
@@ -43,6 +44,9 @@ def get_one_office(id):
 def register_candidate():
     """an admin can register a candidate to the office"""
     post_data = request.get_json()
+    if not post_data:
+        return Responses.bad_request('Invalid your json keys. Use these keys '
+                                     'office, candidate ')
     candidate = post_data['candidate']
     office = post_data['office']
     res = c.save_candidate(candidate, office)
@@ -51,6 +55,6 @@ def register_candidate():
 
 
 @version2.route("/office/<int:office_id>/result", methods=["GET"])
-# @jwt_required
+@jwt_required
 def get_office_results(office_id):
     return ofisi.get_specific_results(office_id)
