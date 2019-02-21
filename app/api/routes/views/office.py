@@ -53,8 +53,6 @@ def register_candidate():
     office = post_data['office']
     candidate_object =c(candidate, office)
     res = candidate_object.save_candidate()
-    print(res)
-
     return res
 
 
