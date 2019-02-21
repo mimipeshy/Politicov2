@@ -12,6 +12,7 @@ def dbconn():
     """
     ccnnect to the main database
     """
+    connection = None
     try:
         if 'pytest' in modules:
             db = 'test_andela'
@@ -19,8 +20,13 @@ def dbconn():
             db='politico'
         connection = psycopg2.connect(dbname=db, user='peshy', host='localhost', password='admin')
     except psycopg2.DatabaseError as e:
-        print('connection failed')
-        return {'error': str(e)}
+        try:
+            if os.getenv('CONFIG_SETTING') == 'production':
+                connection = psycopg2.connect(os.environ['DATABASE_URL'],
+                                              sslmode='require')
+        except:
+            print('connection failed')
+            return {'error': str(e)}
     connection.autocommit = True
     return connection
 
