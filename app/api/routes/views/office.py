@@ -8,6 +8,7 @@ from app.api.validations.utils import Validations
 
 
 @version2.route("/office", methods=['POST'])
+# @jwt_required
 def create_an_office():
     """this creates a new office"""
     data = request.get_json()
@@ -31,12 +32,14 @@ def get_all_offices():
 
 
 @version2.route("/office/<int:id>", methods=['GET'])
+# @jwt_required
 def get_one_office(id):
     """this gets one specific office"""
     return ofisi.get_one_office(id)
 
 
 @version2.route("/office/register", methods=['POST'])
+# @jwt_required
 def register_candidate():
     """an admin can register a candidate to the office"""
     post_data = request.get_json()

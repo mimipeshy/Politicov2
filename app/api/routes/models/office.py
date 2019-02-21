@@ -23,6 +23,7 @@ class GovernmentOffice:
                 name, type)
         )
         conn.commit()
+        conn.close()
         return GovernmentOffice.find_office_by_name(name)
 
     @staticmethod

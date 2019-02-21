@@ -18,7 +18,7 @@ before_script:
 
 script:
  - source ./.travis.sh
- - pytest -v --cov=app
+ - pytest -v --cov=app/tests
 
 after_script:
  - coveralls

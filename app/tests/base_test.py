@@ -11,7 +11,6 @@ from app.api.database.db_conn import dbconn, drop_tables, create_tables
 
 conn = dbconn()
 
-
 class BaseTests(unittest.TestCase):
     """This class represents the base configurations for all tests"""
 
@@ -53,24 +52,35 @@ class BaseTests(unittest.TestCase):
             "name": "governnemt",
             "type": "senate"
         })
-        self.length_name= json.dumps({
-            "name":"ertt",
+        self.length_name = json.dumps({
+            "name": "ertt",
             "hqAddress": "koko",
             "logoUrl": "http://facebook.com/pic.jpg"
 
         })
         self.length_hqAddress = json.dumps({
-             "name":"erttmommk",
+            "name": "erttmommk",
             "hqAddress": "koko",
             "logoUrl": "http://facebook.com/pic.jpg"
         })
 
-        self.length_type= json.dumps({
-             "name":"ertmoomot",
+        self.length_type = json.dumps({
+            "name": "ertmoomot",
             "type": "koko",
 
         })
-        self.missing_http= json.dumps({
+        self.register_user = {
+            "first_name": "peris",
+            "last_name": "ndanu",
+            "other_name": "kimeu",
+            "email": "ndani@gmail.com",
+            "password": "South@frica12*",
+            "phone_number": "45678",
+            "passportUrl": "bujuu",
+            "is_admin": "TRUE"
+
+        }
+        self.missing_http = json.dumps({
             "name": "erttmommk",
             "hqAddress": "kokmokoo",
             "logoUrl": "mdoossd"
@@ -88,12 +98,18 @@ class BaseTests(unittest.TestCase):
             "logoUrl": "http://mdoossd.com"
 
         })
-        self.validate_strings= json.dumps({
+        self.validate_strings = json.dumps({
             "name": 1,
             "hqAddress": 2,
             "logoUrl": "http://mdoossd.com/pol.ko"
 
         })
 
+
+
     def tearDown(self):
         drop_tables()
+
+    # def tearDown(self):
+    #     print("nfdfndifdifdi")
+    #     drop_tables()

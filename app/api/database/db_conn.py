@@ -100,5 +100,6 @@ def drop_tables():
             cursor.execute(query)
 
         connection.commit()
+        connection.close()
     except psycopg2.DatabaseError as e:
         print(e)
