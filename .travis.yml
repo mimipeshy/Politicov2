@@ -12,8 +12,8 @@ before_script:
  - psql -c "create role peshy with superuser login password 'admin';" -U postgres
  - psql -c 'create database politico;' -U postgres
  - psql -c 'alter database politico owner to peshy' -U postgres
- - psql -c 'create database testpolitico;' -U postgres
- - psql -c 'alter database testpolitico owner to peshy' -U postgres
+ - psql -c 'create database test_andela;' -U postgres
+ - psql -c 'alter database test_andela owner to peshy' -U postgres
 
 
 script:

@@ -11,7 +11,6 @@ from app.api.routes.views.votes import version2 as votes
 from flask_jwt_extended import JWTManager
 
 
-
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])

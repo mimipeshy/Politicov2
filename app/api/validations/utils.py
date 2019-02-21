@@ -8,6 +8,8 @@ from app.api.routes.models.political import PoliticalParty as p
 from urllib.parse import urlparse
 from app.api.routes.models.office import GovernmentOffice as g
 
+political_obj = p()
+office_obj = g()
 
 class Validations:
 
@@ -32,12 +34,11 @@ class Validations:
         data = request.get_json()
         name = data['name'].strip()
         hqAddress = data['hqAddress'].strip()
-        is_valid_name = r'[a-z]+'
         if len(name) < 6:
             return Responses.bad_request("Name should have more than 6 charcaters"), 400
         if len(hqAddress) < 6:
             return Responses.bad_request("hqAddress should have more than 6 charcaters"), 400
-        party_exist = p.find_party_by_name(name)
+        party_exist = political_obj.find_party_by_name(name)
         if party_exist:
             return Responses.bad_request({"Message": "Sorry, the party already exists"}), 400
 
@@ -106,7 +107,7 @@ class Validations:
             return Responses.bad_request("Type cannot be empty"), 400
         if len(name) < 6:
             return Responses.bad_request("Office Name should have more than 6 characters"), 400
-        office_exist = g.find_office_by_name(name)
+        office_exist = office_obj.find_office_by_name(name)
         if office_exist:
             return Responses.bad_request({"Message": "Sorry, the office already exists"}), 404
 
@@ -132,11 +133,11 @@ class Validations:
             return Responses.bad_request("Name should have more than 6 characters"), 400
         if not isinstance(data['name'], str):
             return Responses.bad_request('Ensure that all name input is a string'), 400
-        office_exist = g.find_office_by_name(name)
+        office_exist = office_obj.find_office_by_name(name)
         if office_exist:
             return Responses.bad_request({"Message": "Sorry, the office already exists"}), 404
 
     @staticmethod
     def validate_admin(email):
-        if email != "tevinthuku@gmail.com":
+        if email != "peris@gmail.com":
             abort(Responses.bad_request("You are not an admin"))

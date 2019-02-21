@@ -6,18 +6,29 @@ import os
 import psycopg2
 import psycopg2.extras
 from flask import current_app
-
+from sys import modules
 
 def dbconn():
     """
     ccnnect to the main database
     """
+    connection = None
     try:
-        connection = psycopg2.connect(dbname='politico', user='peshy', host='localhost', password='admin')
-        return connection
+        if 'pytest' in modules:
+            db = 'test_andela'
+        else:
+            db='politico'
+        connection = psycopg2.connect(dbname=db, user='peshy', host='localhost', password='admin')
     except psycopg2.DatabaseError as e:
-        return {'error': str(e)}
-
+        try:
+            if os.getenv('CONFIG_SETTING') == 'production':
+                connection = psycopg2.connect(os.environ['DATABASE_URL'],
+                                              sslmode='require')
+        except:
+            print('connection failed')
+            return {'error': str(e)}
+    connection.autocommit = True
+    return connection
 
 def create_tables():
     """
@@ -76,8 +87,6 @@ def create_tables():
         # create tables
         for query in queries:
             cursor.execute(query)
-
-        cursor.close()
         connection.commit()
         connection.close()
 
@@ -86,19 +95,14 @@ def create_tables():
 
 
 def drop_tables():
-    db_test_url = os.getenv('DATABASE_URL')
-    connection = psycopg2.connect(db_test_url)
+    connection = dbconn()
     cursor = connection.cursor()
-    users = """DROP TABLE IF EXISTS users CASCADE"""
-    blacklist = """DROP TABLE IF EXISTS blacklist CASCADE"""
-    party = """DROP TABLE IF EXISTS party CASCADE"""
-    office = """DROP TABLE IF EXISTS office CASCADE"""
-    votes= """DROP TABLE IF EXISTS votes CASCADE"""
-    queries = [users, blacklist, party, office, votes]
-    try:
-        for query in queries:
-            cursor.execute(query)
-
-        connection.commit()
-    except psycopg2.DatabaseError as e:
-        print(e)
+    cursor.execute(
+        "SELECT table_schema,table_name FROM information_schema.tables "
+        " WHERE table_schema = 'public' ORDER BY table_schema,table_name"
+    )
+    rows = cursor.fetchall()
+    for row in rows:
+        cursor.execute("drop table "+row[1] + " cascade")
+    connection.commit()
+    connection.close()

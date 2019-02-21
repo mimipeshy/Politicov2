@@ -10,6 +10,8 @@ import app.api.validations.validation as validate
 from app.api.validations.validation import check_password
 import app.api.responses as errors
 
+user_object = u()
+
 
 @version2.route("/auth/signup", methods=['POST'])
 def register_new_user():
@@ -23,27 +25,27 @@ def register_new_user():
         phone_number = data['phone_number']
         password = data['password']
         passportUrl = data['passportUrl']
-        is_admin = data['is_admin']
         email = data['email']
 
     except:
         return Responses.bad_request('Check your json keys. '
                                      'first_name, last_name, other_name,'
-                                     'phone_number, email, password,is_admin, passportUrl', )
+                                     'phone_number, email, password, passportUrl', )
     validate.validate_extra()
-    validate.check_for_strings(data, ['first_name', 'last_name', 'other_name', 'email', 'is_admin', 'password'])
+    validate.check_for_strings(data, ['first_name', 'last_name', 'other_name', 'email',  'password'])
     validate.check_for_blank_spaces(data,
-                                    ['first_name', 'last_name', 'other_name', 'email', 'phone', 'is_admin', 'password'])
+                                    ['first_name', 'last_name', 'other_name', 'email', 'phone',  'password'])
     validate.check_email_is_valid(email)
-    validate.check_valid_phone_number(phone_number)
-    user_exist = u.get_one_by_email(email)
+
+    user_exist = user_object.get_one_by_email(email)
     if user_exist:
-        return Responses.bad_request({"Message": "User already exists, please login"}), 404
-    user = u(first_name, last_name, other_name, email, phone_number, password, passportUrl, is_admin)
-    user_id = user.save(is_admin)
+        return Responses.bad_request({"Message": "User already exists, please login"})
+    is_admin = False
+    user_ob = u(first_name, last_name, other_name, email, phone_number, password, passportUrl, is_admin)
+    user_ob.save()
     token = create_access_token(identity=email)
     return make_response(jsonify({"Data": "User {} registered".format(email),
-                                  "token": token}))
+                                  "token": token}), 201)
 
 
 @version2.route("/auth/login", methods=['POST'])
@@ -55,21 +57,22 @@ def login_user():
             password = data['password']
             email = data['email']
             if not email:
-                return Responses.bad_request('Your email is missing!')
+
+                return Responses.not_found('Your email is missing!'),
             if not validate.check_email_is_valid(email):
-                return Responses.bad_request('Your email is invalid! Kindly recheck your email.')
-            user = u.get_one_by_email(email)
-            # user_id = u.get_one_by_id(user)
+
+                return Responses.not_found('Your email is invalid! Kindly recheck your email.')
+            user = user_object.get_one_by_email(email)
             if not user:
-                return Responses.bad_request('User does not exist. Kindly register!')
+                return Responses.not_found('User does not exist. Kindly register!')
             else:
                 if email and password:
-                    password_hash = u.get_password(email)[0]
-                    if check_password(password_hash,password):
+                    password_hash = user_object.get_password(email)[0]
+                    if check_password(password_hash, password):
                         token = create_access_token(identity=email)
                         if token:
                             return make_response(jsonify({"Success": 'You have logged in successfully!',
-                                                          "token": token}))
+                                                          "token": token}), 200)
                     else:
                         return Responses.bad_request('Wrong Password!')
                 else:
@@ -83,5 +86,4 @@ def login_user():
     except errors.Unauthorized as e:
         return e.message
     except Exception as error:
-
         return make_response(jsonify({"error": "Please provide for all the fields. Missing field: " + str(error)}), 400)
