@@ -59,6 +59,7 @@ def get_update_party(party_id):
     return p.update_party(party_id)
 
 
+
 @version2.route("/party/<int:party_id>", methods=['DELETE'])
 def delete_specific_party(party_id):
     data = p.find_party_by_id(party_id)

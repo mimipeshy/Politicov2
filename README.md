@@ -41,27 +41,11 @@ Use pytest to run: `pytest --cov=app`
 | POST  /api/v2/office                    | CREATE government office           |                                     
 | GET  /api/v2/office/<int:id>            | GET ONE government office          |                                                                  
 | GET  /api/v2/office                     | GET ALL government offices         |  
-| POST  /api/v2/auth/signup               | CREATE  a new user                 |                                                                
-
-
-# How to run endpoints in postman
-Run these fields on  postman:-
-
-```bash
-
-
-this creates a new political party
-{
-"name": String,
-"hqAddress": String,
-}
-this creates a new government office
-{
-"name" : String,
-"type": String
-}
-
-```
+| POST  /api/v2/auth/signup               | CREATE  a new user                 | 
+| POST  /api/v2/auth/login                | LOGS in a new user                 | 
+| POST  /api/v2/office/register           | ADD candidate to political office  | 
+| POST  /api/v2/votes                     | ALLOWS voter to vote               | 
+| GET  /api/v2/office/<int:id>/result     | GET results of votes casted        |                                                                
 
 
 
