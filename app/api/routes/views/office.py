@@ -32,13 +32,11 @@ def get_all_offices():
 
 @version2.route("/office/<int:id>", methods=['GET'])
 def get_one_office(id):
-
     """this gets one specific office"""
     return ofisi.get_one_office(id)
 
 
 @version2.route("/office/register", methods=['POST'])
-
 def register_candidate():
     """an admin can register a candidate to the office"""
     post_data = request.get_json()
@@ -48,3 +46,8 @@ def register_candidate():
 
     return res
 
+
+@version2.route("/office/<int:office_id>/result", methods=["GET"])
+# @jwt_required
+def get_office_results(office_id):
+    return ofisi.get_specific_results(office_id)

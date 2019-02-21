@@ -66,3 +66,23 @@ class GovernmentOffice:
             }
             offices.append(item)
         return jsonify({"msg": offices})
+
+    @staticmethod
+    def get_specific_results(office_id):
+        """this gets a specific office result"""
+        results = []
+        cur = conn.cursor()
+        cur.execute("""
+                SELECT candidate, COUNT(candidate) AS result, office FROM votes WHERE votes.office = {} GROUP BY candidate, office;
+            """.format(office_id))
+        data = cur.fetchall()
+        if not data:
+            return jsonify({"msg": "no votes casted yet"}), 404
+        for result in data:
+            item = {
+                "candidate": result[0],
+                "result": result[1],
+                "office": result[2]
+            }
+            results.append(item)
+            return jsonify({"msg": results})
