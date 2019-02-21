@@ -13,16 +13,16 @@ def dbconn():
     ccnnect to the main database
     """
     try:
-
         if 'pytest' in modules:
-            dbname = 'test_andela'
+            db = 'test_andela'
         else:
-            dbname='politico'
-        connection = psycopg2.connect(dbname=dbname, user='peshy', host='localhost', password='admin')
-        return connection
+            db='politico'
+        connection = psycopg2.connect(dbname=db, user='peshy', host='localhost', password='admin')
     except psycopg2.DatabaseError as e:
+        print('connection failed')
         return {'error': str(e)}
-
+    connection.autocommit = True
+    return connection
 
 def create_tables():
     """

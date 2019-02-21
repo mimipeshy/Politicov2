@@ -1,48 +1,41 @@
 from flask import jsonify, make_response, request
 from app.api.responses import Responses
 
-from app.api.database.db_conn import dbconn
 
-conn = dbconn()
+from app.api.routes.models.connection import CreateConnection
 
 
-class PoliticalParty:
+class PoliticalParty(CreateConnection):
     """this initializes political party class methods"""
 
-    def __init__(self, name, hqAddress, logoUrl):
-        self.name = name
-        self.hqAddress = hqAddress
-        self.logoUrl = logoUrl
+    def __init__(self, name=None, hqAddress=None, logoUrl=None):
+        CreateConnection.__init__(self)
+        if name and hqAddress and logoUrl:
+            self.name = name
+            self.hqAddress = hqAddress
+            self.logoUrl = logoUrl
 
-    def save(self, name, hqAddress, logoUrl):
+    def save(self):
         """this adds a new party"""
-        cursor = conn.cursor()
-        cursor.execute(
+        self.cursor.execute(
             """INSERT INTO party(name,hqAddress, logoUrl) VALUES(%s,%s,%s) """, (
-                name, hqAddress, logoUrl)
+                self.name, self.hqAddress, self.logoUrl)
         )
-        conn.commit()
+        return self.find_party_by_name(self.name)
 
-        return PoliticalParty.find_party_by_name(name)
-
-    @staticmethod
-    def find_party_by_name(name):
+    def find_party_by_name(self, name):
         """this gets a party by name"""
-        cursor = conn.cursor()
         sql = """SELECT * FROM party WHERE name = '{0}'""".format(name)
-        cursor.execute(sql)
-        result = cursor.fetchone()
-        conn.commit()
+        self.cursor.execute(sql)
+        result = self.cursor.fetchone()
 
         return result
 
-    @staticmethod
-    def get_all_parties():
+    def get_all_parties(self):
         """this returns all parties"""
-        cursor = conn.cursor()
         sql = "SELECT * FROM party"
-        cursor.execute(sql)
-        parties = cursor.fetchall()
+        self.cursor.execute(sql)
+        parties = self.cursor.fetchall()
         if not parties:
             return jsonify({"Message": "No created parties"}), 404
         allparties = []
@@ -56,13 +49,11 @@ class PoliticalParty:
             allparties.append(oneparty)
         return jsonify({"Parties": allparties})
 
-    @staticmethod
-    def get_one_party(id):
+    def get_one_party(self, id):
         """this returns one specific party"""
         parties = []
-        cur = conn.cursor()
-        cur.execute("""SELECT * FROM party WHERE id = %s """ % id)
-        data = cur.fetchall()
+        self.cursor.execute("""SELECT * FROM party WHERE id = %s """ % id)
+        data = self.cursor.fetchall()
         if not data:
             return jsonify({"Message": "Party does not exist"}), 404
         for party in data:
@@ -74,40 +65,30 @@ class PoliticalParty:
             }
             parties.append(item)
             return Responses.complete_response(parties)
-        conn.commit()
         return parties
 
-    @staticmethod
-    def update_party(id):
+    def update_party(self, id):
         """this edits a party name"""
         partyid = id
         data = request.get_json()
         name = data['name']
-        cur = conn.cursor()
-        cur.execute("""SELECT id FROM party WHERE id = {}""".format(id))
-        row = cur.fetchone()
+        self.cursor.execute("""SELECT id FROM party WHERE id = {}""".format(id))
+        row = self.cursor.fetchone()
         if row:
-            cur.execute("""UPDATE party SET name = '{}'""".format(name))
+            self.cursor.execute("""UPDATE party SET name = '{}'""".format(name))
             return make_response(jsonify({"Message": "Update successful"}))
         return make_response(jsonify({"Message": "Update failed"}), 404)
 
-    @staticmethod
-    def delete_party(id):
+    def delete_party(self, id):
         """this deletes a party"""
-        cur = conn.cursor()
         sql = """DELETE FROM party WHERE id = %(id)s"""
         data = {"id": int(id)}
-        cur.execute(sql, data)
-        conn.commit()
+        self.cursor.execute(sql, data)
 
-
-    @staticmethod
-    def find_party_by_id(id):
+    def find_party_by_id(self, id):
         """this gets a party by id"""
-        cur = conn.cursor()
         sql = """SELECT * FROM party WHERE id = '{0}'""".format(id)
-        cur.execute(sql)
-        result = cur.fetchone()
-        conn.commit()
+        self.cursor.execute(sql)
+        result = self.cursor.fetchone()
 
         return result

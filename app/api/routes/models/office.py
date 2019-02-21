@@ -1,47 +1,39 @@
 from flask import jsonify
 
 from app.api.responses import Responses
-from app.api.database.db_conn import  dbconn
 
-conn = dbconn()
-offices = []
+from app.api.routes.models.connection import CreateConnection
 
 
-class GovernmentOffice:
+class GovernmentOffice(CreateConnection):
     """this initializes political office class methods"""
 
-    def __init__(self, name, type):
-        self.id = len(offices) + 1
-        self.name = name
-        self.type = type
+    def __init__(self, name=None, type=None):
+        CreateConnection.__init__(self)
+        if name and type:
+            self.name = name
+            self.type = type
 
-    def add_political_office(self, name, type):
+    def add_political_office(self):
         """this saves political office data"""
-        cursor = conn.cursor()
-        cursor.execute(
+        self.cursor.execute(
             """INSERT INTO office(name,type) VALUES(%s,%s)""", (
-                name, type)
+                self.name, self.type)
         )
-        conn.commit()
+        return self.find_office_by_name(self.name)
 
-        return GovernmentOffice.find_office_by_name(name)
-
-    @staticmethod
-    def find_office_by_name(name):
+    def find_office_by_name(self, name):
         """this gets an office by name"""
-        cursor = conn.cursor()
         sql = """SELECT * FROM office WHERE name = '{0}'""".format(name)
-        cursor.execute(sql)
-        result = cursor.fetchone()
+        self.cursor.execute(sql)
+        result = self.cursor.fetchone()
         return result
 
-    @staticmethod
-    def get_all_offices():
+    def get_all_offices(self):
         """this gets all offices"""
-        cursor = conn.cursor()
         sql = """SELECT * FROM office"""
-        cursor.execute(sql)
-        offices = cursor.fetchall()
+        self.cursor.execute(sql)
+        offices = self.cursor.fetchall()
         if not offices:
             return jsonify({"message": "no created offices"}), 404
         alloffices = []
@@ -50,13 +42,11 @@ class GovernmentOffice:
             alloffices.append(oneoffice)
         return jsonify({"All offices": alloffices})
 
-    @staticmethod
-    def get_one_office(id):
+    def get_one_office(self, id):
         """this gets one office details"""
         offices = []
-        cur = conn.cursor()
-        cur.execute("""SELECT * FROM office WHERE office_id = %s """ % id)
-        data = cur.fetchall()
+        self.cursor.execute("""SELECT * FROM office WHERE office_id = %s """ % id)
+        data = self.cursor.fetchall()
         if not data:
             return jsonify({"msg": "No offices created yet"}), 404
         for office in data:
@@ -68,15 +58,13 @@ class GovernmentOffice:
             offices.append(item)
         return jsonify({"msg": offices})
 
-    @staticmethod
-    def get_specific_results(office_id):
+    def get_specific_results(self, office_id):
         """this gets a specific office result"""
         results = []
-        cur = conn.cursor()
-        cur.execute("""
+        self.cursor.execute("""
                 SELECT candidate, COUNT(candidate) AS result, office FROM votes WHERE votes.office = {} GROUP BY candidate, office;
             """.format(office_id))
-        data = cur.fetchall()
+        data = self.cursor.fetchall()
         if not data:
             return jsonify({"msg": "no votes casted yet"}), 404
         for result in data:

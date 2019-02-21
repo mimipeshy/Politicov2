@@ -1,9 +1,6 @@
-import json
-import unittest
 
-from app.tests.base_test import BaseTests
 from .base_test import BaseTests
-
+import json
 
 #
 class AuthTests(BaseTests):
@@ -11,13 +8,18 @@ class AuthTests(BaseTests):
 
     def test_user_registration(self):
         """this checks a user for login"""
-        response = self.client().post('/api/v2/auth/signup', data=self.register_user,
+        response = self.client.post('/api/v2/auth/signup', data=json.dumps(self.register_user),
                                       content_type='application/json',
                                       )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
     def test_user_login(self):
-        response = self.client().post('/api/v2/auth/login', data=self.login_user,
-                                      content_type='application/json',
+        self.client.post('/api/v2/auth/signup', content_type='application/json',
+                         data=self.register_user
+                                    )
+        response = self.client.post('/api/v2/auth/login', headers = {
+                                          'Content-Type': 'application/json'
+                                      },
+                                      data=json.dumps(self.login_user)
                                       )
         self.assertEqual(response.status_code, 200)

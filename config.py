@@ -6,28 +6,27 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET_KEY')
+    JWT_SECRET_KEY = "sijuiaki"
 
 
 class DevelopmentConfig(Config):
     """Configurations for Development."""
     DEBUG = True
     TESTING = True
-    JWT_SECRET_KEY = "sijuiaki"
+
 
 
 class TestingConfig(Config):
     """Configurations for Testing."""
     TESTING = True
     DEBUG = True
-    DATABASE_NAME = "testpolitico"
-    JWT_SECRET_KEY = "sijuiaki"
+    DATABASE_NAME = "test_andela"
 
 
 class ProductionConfig(Config):
     """Configurations for Production."""
     DEBUG = False
     TESTING = False
-    JWT_SECRET_KEY = "sijuiaki"
 
 
 app_config = {'development': DevelopmentConfig,

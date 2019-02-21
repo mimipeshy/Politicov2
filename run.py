@@ -4,7 +4,7 @@ from flask import make_response, jsonify
 
 from app.api.app import create_app
 
-config_name = os.getenv('APP_SETTINGS')
+config_name = 'development'
 app = create_app(config_name)
 
 

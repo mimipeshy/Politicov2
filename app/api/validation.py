@@ -41,8 +41,9 @@ def check_for_blank_spaces(data, required_fields):
 
 def check_email_is_valid(email):
     """this checks that the email is of the correct format"""
-    email_address_matcher = re.compile('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-    return True if email_address_matcher.match(email) else False
+    email_regex = re.compile('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$')
+    if not re.match(email_regex, email):
+        return Responses.not_found("invalid email")
 
 
 def check_for_strings(data, checklist):
