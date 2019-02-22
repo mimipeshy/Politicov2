@@ -41,12 +41,12 @@ def register_new_user():
     if not re.match(email_regex, email):
         return Responses.not_found("invalid email")
     if not re.search("((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$#@]).{6,12})", password):
-        return Responses.not_found("Password should contain atleast a letter, symbol,uppercase and lowercase characters")
+        return Responses.not_found("Password should contain atleast a letter, symbol,uppercase and lowercase characters"),
 
 
     user_exist = user_object.get_one_by_email(email)
     if user_exist:
-        return Responses.bad_request({"Message": "User already exists, please login"})
+        return Responses.bad_request({"Message": "User already exists, please login"}),400
     is_admin = False
     user_ob = u(first_name, last_name, other_name, email, phone_number, password, passportUrl, is_admin)
     user_ob.save()

@@ -56,7 +56,7 @@ class GovernmentOffice(CreateConnection):
                 "type": office[2]
             }
             offices.append(item)
-        return jsonify({"msg": offices})
+        return jsonify({"msg": offices}), 200
 
     def get_specific_results(self, office_id):
         """this gets a specific office result"""
