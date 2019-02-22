@@ -48,12 +48,12 @@ def create_political_party():
 
 @version2.route("/party", methods=['GET'])
 def get_all_parties():
-    return political_obj.get_all_parties()
+    return political_obj.get_all_parties(),200
 
 
 @version2.route("/party/<int:party_id>", methods=['GET'])
 def get_one_party(party_id):
-    return political_obj.get_one_party(party_id)
+    return political_obj.get_one_party(party_id),200
 
 
 @version2.route("/party/<int:party_id>/name", methods=['PATCH'])

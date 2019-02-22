@@ -8,6 +8,9 @@ import psycopg2.extras
 from flask import current_app
 from sys import modules
 
+from werkzeug.security import generate_password_hash
+
+
 def dbconn():
     """
     ccnnect to the main database
@@ -74,19 +77,26 @@ def create_tables():
         """,
         """
         CREATE TABLE IF NOT EXISTS candidate(
-         id SERIAL,
+         id SERIAL PRIMARY KEY,
          candidate INTEGER,
          office INTEGER,
-         PRIMARY KEY (office, candidate)      
+         FOREIGN KEY (candidate) REFERENCES users(user_id) ON DELETE CASCADE,
+         UNIQUE(candidate)     
         )
-        """
+        """,
+
     )
+
+
     try:
+
         connection = dbconn()
         cursor = connection.cursor()
         # create tables
         for query in queries:
             cursor.execute(query)
+
+
         connection.commit()
         connection.close()
 

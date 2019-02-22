@@ -1,20 +1,24 @@
 from flask import jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.api.blueprints import version2
 from app.api.responses import Responses
+from app.api.routes.models.user import UserModel as u
 from app.api.routes.models.candidate import Candidates as c
 from app.api.routes.models.office import GovernmentOffice as ofisi
 from app.api.validations.utils import Validations
 
 candidate_obj = c()
 office_obj = ofisi()
+user_obj = u()
+
 
 @version2.route("/office", methods=['POST'])
 @jwt_required
 def create_an_office():
     """this creates a new office"""
     data = request.get_json()
+
     valid = Validations.create_office()
     if valid:
         return Validations.create_office()
@@ -23,7 +27,7 @@ def create_an_office():
     final = ofisi(name, type)
     response = final.add_political_office()
     result = [{"id": response[0], "name": response[1], "type": response[2]}]
-    return jsonify({"msg": result}), 201
+    return jsonify({"Office created successfully": result}), 201
 
 
 @version2.route("/office", methods=['GET'])
@@ -45,13 +49,15 @@ def get_one_office(id):
 @jwt_required
 def register_candidate():
     """an admin can register a candidate to the office"""
+
     post_data = request.get_json()
     if not post_data:
         return Responses.bad_request('Invalid your json keys. Use these keys '
                                      'office, candidate ')
+
     candidate = post_data['candidate']
     office = post_data['office']
-    candidate_object =c(candidate, office)
+    candidate_object = c(candidate, office)
     res = candidate_object.save_candidate()
     return res
 

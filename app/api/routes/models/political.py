@@ -47,7 +47,7 @@ class PoliticalParty(CreateConnection):
             oneparty["logoUrl"] = party[3]
 
             allparties.append(oneparty)
-        return jsonify({"Parties": allparties})
+        return jsonify({"Parties": allparties}),200
 
     def get_one_party(self, id):
         """this returns one specific party"""
@@ -69,15 +69,17 @@ class PoliticalParty(CreateConnection):
 
     def update_party(self, id):
         """this edits a party name"""
-        partyid = id
-        data = request.get_json()
-        name = data['name']
-        self.cursor.execute("""SELECT id FROM party WHERE id = {}""".format(id))
-        row = self.cursor.fetchone()
-        if row:
-            self.cursor.execute("""UPDATE party SET name = '{}'""".format(name))
-            return make_response(jsonify({"Message": "Update successful"}))
-        return make_response(jsonify({"Message": "Update failed"}), 404)
+        try:
+            partyid = id
+            data = request.get_json()
+            name = data['name']
+            self.cursor.execute("""SELECT id FROM party WHERE id = {}""".format(id))
+            row = self.cursor.fetchone()
+            if row:
+                self.cursor.execute("""UPDATE party SET name = '{}'""".format(name))
+                return make_response(jsonify({"Message": "Update successful"}),200)
+        except Exception:
+            return make_response(jsonify({"Message": "Update failed"}), 400)
 
     def delete_party(self, id):
         """this deletes a party"""
