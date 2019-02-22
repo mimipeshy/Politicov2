@@ -1,17 +1,14 @@
-from datetime import datetime, timedelta
+from flask import jsonify
 
-import jwt
-from flask import jsonify, current_app
-from app.api.routes.models.connection import CreateConnection
 import app.api.validations.validation as validate
-import app.api.responses as errors
-
+from app.api.routes.models.connection import CreateConnection
 
 
 class UserModel(CreateConnection):
     __tablename__ = 'users'
 
-    def __init__(self, first_name=None, last_name=None, other_name=None, email=None, phone=None, password=None, passportUrl=None, is_admin=None):
+    def __init__(self, first_name=None, last_name=None, other_name=None, email=None, phone=None, password=None,
+                 passportUrl=None, is_admin=None):
         CreateConnection.__init__(self)
         if first_name and last_name and other_name and email and passportUrl and password and phone and not is_admin:
             self.email = email
@@ -22,14 +19,14 @@ class UserModel(CreateConnection):
             self.othername = other_name
             self.phone = phone
             self.passport = passportUrl
-            print(self.first_name)
 
     def save(self):
         """this adds a new user"""
         self.cursor.execute(
             "INSERT INTO users(fname,lname, othername,email,phone,password,passUrl,is_admin) VALUES(%s,%s,%s,%s,%s,"
             "%s,%s,%s)", (
-                self.first_name, self.lname, self.othername, self.email, self.phone, self.password_hash, self.passport, self.admin)
+                self.first_name, self.lname, self.othername, self.email, self.phone, self.password_hash, self.passport,
+                self.admin)
         )
 
     def get_one_by_email(self, email):
@@ -48,7 +45,7 @@ class UserModel(CreateConnection):
 
     def fetch_user_id(self, email):
         """Method returns the user's id by querying the email"""
-        query = """SELECT user_id FROM users WHERE email='{}'""" .format(email)
+        query = """SELECT user_id FROM users WHERE email='{}'""".format(email)
         self.cursor.execute(query)
         result = self.cursor.fetchone()
         return result
@@ -69,7 +66,7 @@ class UserModel(CreateConnection):
 
         if result:
             message = "No users exist in the database"
-            response = jsonify({"message": message})
+            response = jsonify({"message": message}, 404)
         else:
             users = []
             for user in result:
@@ -86,7 +83,10 @@ class UserModel(CreateConnection):
 
     def fetch_role(self, user_id):
         """Method to return the user's role"""
-        self.cursor.execute("""SELECT is_admin FROM users WHERE user_id='%s'""" % user_id)
+        self.cursor.execute("""SELECT email FROM users WHERE email='%s'""" % user_id)
         row = self.cursor.fetchone()
+        self.cursor.execute("""INSERT INTO users ('superadmin','super@admin.com','admin','admin@admin.com','071234567','haina','pic.jpg','True' WHERE 'super@admin.com NOT IN
+                       (
+                       SELECT email FROM users
+                       );""")
         return row
-

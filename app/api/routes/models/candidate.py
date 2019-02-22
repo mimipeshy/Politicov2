@@ -22,24 +22,25 @@ class Candidates(CreateConnection):
 
             self.cursor.execute(sql)
             result = self.cursor.fetchone()
+
             if not result:
-                return make_response(jsonify({"Message": "Candidate not registered"}))
+                return make_response(jsonify({"Message": "Candidate not registered"}), 404)
 
             self.cursor.execute(office_sql)
             c_office = self.cursor.fetchone()
             if not c_office:
-                return make_response(jsonify({"Message": "office not registered"}))
+                return make_response(jsonify({"Message": "office not registered"}), 404)
 
             self.cursor.execute(candidate_sql)
             c_candidate = self.cursor.fetchone()
             if c_candidate:
-                return make_response(jsonify({"Message": "Candidate already registered for office"}))
+                return make_response(jsonify({"Message": "Candidate already registered for office"}),400)
             self.cursor.execute(
                 """INSERT INTO candidate(candidate, office) VALUES(%s,%s)""",
                 (self.candidate, self.office))
-            return make_response(jsonify({"Message": "Candidate Added succesfully",
+            return make_response(jsonify({"Message": "Candidate Added successfully",
                                           "candidate_id": self.candidate,
-                                          "office_id": self.office}))
+                                          "office_id": self.office}), 201)
         except (Exception, psycopg2.DatabaseError) as e :
             return make_response(jsonify({"Message":"Something went wrong" + str(e.args[0])}))
 

@@ -141,3 +141,31 @@ class Validations:
     def validate_admin(email):
         if email != "peris@gmail.com":
             abort(Responses.bad_request("You are not an admin"))
+
+    @staticmethod
+    def verify_user_signup():
+        """check that political party details are valid"""
+        data = request.get_json()
+        first_name = data['first_name'].strip()
+        last_name = data['last_name'].strip()
+        other_name = data['other_name'].strip()
+        email= data['email'].strip()
+        password=data ['password'].strip()
+        phone_number= data['phone_number'].strip()
+        passportUrl= data['passportUrl'].strip()
+
+        if len(first_name) == 0:
+            return Responses.bad_request("Name cannot be empty"), 400
+        if len(last_name) == 0:
+            return Responses.bad_request("Last name cannot be empty"), 400
+        if len(other_name) == 0:
+            return Responses.bad_request("Other name cannot be empty"), 400
+        if len(email) == 0:
+            return Responses.bad_request("EMail cannot be empty"), 400
+        if len(password) == 0:
+            return Responses.bad_request("Password name cannot be empty"), 400
+        if len(phone_number) == 0:
+            return Responses.bad_request("Phone_number cannot be empty"), 400
+        if len(passportUrl) == 0:
+            return Responses.bad_request("PassportUrl cannot be empty"), 400
+

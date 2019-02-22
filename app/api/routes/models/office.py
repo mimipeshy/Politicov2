@@ -35,12 +35,12 @@ class GovernmentOffice(CreateConnection):
         self.cursor.execute(sql)
         offices = self.cursor.fetchall()
         if not offices:
-            return jsonify({"message": "no created offices"}), 404
+            return jsonify({"message": "no created offices"}), 400
         alloffices = []
         for office in offices:
             oneoffice = {"id": office[0], "name": office[1], "type": office[2]}
             alloffices.append(oneoffice)
-        return jsonify({"All offices": alloffices})
+        return jsonify({"All offices": alloffices},200)
 
     def get_one_office(self, id):
         """this gets one office details"""
@@ -74,4 +74,4 @@ class GovernmentOffice(CreateConnection):
                 "office": result[2]
             }
             results.append(item)
-            return jsonify({"msg": results})
+            return jsonify({"msg": results}, 200)

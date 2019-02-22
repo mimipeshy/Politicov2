@@ -75,7 +75,8 @@ class BaseTests(unittest.TestCase):
             "email": "ndani@gmail.com",
             "password": "South@frica12*",
             "phone_number": "45678",
-            "passportUrl": "bujuu"
+            "passportUrl": "bujuu",
+            "is_admin":"True"
 
         }
         self.login_user = {

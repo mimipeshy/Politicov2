@@ -8,6 +8,7 @@ from app.api.routes.views.political import version2 as party
 from app.api.routes.views.office import version2 as office
 from app.api.routes.views.auth import version2 as auth
 from app.api.routes.views.votes import version2 as votes
+
 from flask_jwt_extended import JWTManager
 
 
@@ -20,5 +21,6 @@ def create_app(config_name):
     app.register_blueprint(office)
     app.register_blueprint(auth)
     app.register_blueprint(votes)
+
     JWTManager(app)
     return app
