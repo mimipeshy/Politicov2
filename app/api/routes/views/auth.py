@@ -94,3 +94,5 @@ def login_user():
     except Exception:
         return Responses.bad_request(
             {"Message": "Please provide for all the fields. Missing field:  email, password"}), 400
+
+

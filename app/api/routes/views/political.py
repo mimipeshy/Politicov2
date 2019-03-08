@@ -78,3 +78,5 @@ def delete_specific_party(party_id):
         "status": "OK",
         "Party": "Political party not found"
     }), 404)
+
+

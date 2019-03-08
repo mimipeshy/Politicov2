@@ -109,3 +109,5 @@ class AuthValidations:
         if not re.match('^[0-9]*$', phone_number):
             return Responses.bad_request({"Phone number should only contain numbers"}), 400
         return True
+
+

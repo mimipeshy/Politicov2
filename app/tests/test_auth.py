@@ -128,3 +128,5 @@ class AuthTests(BaseTests):
         data = json.loads(response.data.decode())
         self.assertTrue(data["Data"]['Message'] == "Please provide for all the fields. Missing field:  email, password")
         self.assertEqual(response.status_code, 400)
+
+
