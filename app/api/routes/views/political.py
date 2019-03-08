@@ -11,7 +11,7 @@ political_obj = p()
 
 
 @version2.route("/party", methods=['POST'])
-# @jwt_required
+@jwt_required
 def create_political_party():
     """this creates a new political party"""
     try:
