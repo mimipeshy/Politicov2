@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 
 from app.api.blueprints import version2
 from app.api.responses import Responses
@@ -6,6 +7,7 @@ from app.api.routes.models.votes import Vote as v
 
 
 @version2.route("/votes", methods=['POST'])
+# @jwt_required
 def vote_for_office():
     """a user can vote once for an office"""
 

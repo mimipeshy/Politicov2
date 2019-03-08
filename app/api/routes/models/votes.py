@@ -30,31 +30,31 @@ class Vote(CreateConnection):
             self.cursor.execute(voter_missing)
             result_voter_missing = self.cursor.fetchone()
             if not result_voter_missing:
-                return make_response(jsonify({"Message": "Please registerd to be able to vote"}))
+                return make_response(jsonify({"Message": "Please registerd to be able to vote"}),404)
 
             # check if voted already
             self.cursor.execute(query)
             voted_already = self.cursor.fetchone()
             if voted_already:
-                return make_response(jsonify({"Message": "You have already voted"}))
+                return make_response(jsonify({"Message": "You have already voted"}),404)
 
             # check office
             self.cursor.execute(office_missing)
             result_office_missing = self.cursor.fetchone()
             if not result_office_missing:
-                return make_response(jsonify({"Message": "No such office"}))
+                return make_response(jsonify({"Message": "No such office"}),404)
 
             #check candidate
             self.cursor.execute(candidate_missing)
             result_candidate_missing = self.cursor.fetchone()
             if not result_candidate_missing:
-                return make_response(jsonify({"Message": "No such candidate"}))
+                return make_response(jsonify({"Message": "No such candidate"}),404)
 
 
             self.cursor.execute(
                 """INSERT INTO votes(office, candidate, voter) VALUES ('{}','{}','{}') """.format(self.office, self.candidate, self.voter)
             )
-            return make_response(jsonify({"Message":"Vote successfully"}))
+            return make_response(jsonify({"Message":"Vote successfully"}),200)
         except (Exception, psycopg2.DatabaseError) as e:
             return make_response(jsonify({"Message": "Something went wrong" + str(e.args[0])}))
 

@@ -15,6 +15,7 @@ def register_new_user():
     """this class registers a new user"""
     try:
         data = request.get_json()
+
         first_name = data['first_name']
         last_name = data['last_name']
         other_name = data['other_name']
