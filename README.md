@@ -11,7 +11,8 @@ while building trust in the process through transparency.
 
 3) Activate the virtual environment: `source venv/bin/activate` on Linux/Mac  or `source venv/Scripts/activate` on windows.
 
-4) Install the requirements : `pip install -r requirements.txt`
+4) Git pull
+5) Install the requirements : `pip install -r requirements.txt`
 
 
 ## Running tests
