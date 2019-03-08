@@ -85,12 +85,6 @@ def login_user():
                     if not password:
                         return Responses.bad_request({"Message": 'Your password is missing!'}), 404
         return Responses.bad_request({"Message": 'Content-Type must be JSON.'}), 400
-    except errors.BadRequest as e:
-        return e.message
-    except errors.NotFound as e:
-        return e.message
-    except errors.Unauthorized as e:
-        return e.message
-    except Exception:
+    except:
         return Responses.bad_request(
             {"Message": "Please provide for all the fields. Missing field:  email, password"}), 400
