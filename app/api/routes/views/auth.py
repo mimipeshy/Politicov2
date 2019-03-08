@@ -66,6 +66,8 @@ def login_user():
             email = data['email']
             if not email:
                 return Responses.not_found({"Message": 'Your email is missing!'}), 404
+            if not password:
+                return Responses.bad_request({"Message": 'Your password is missing!'}), 404
             if not v.check_email_is_valid(email):
                 return Responses.not_found({"Message": 'Your email is invalid! Kindly recheck your email.'}), 404
             user = user_object.get_one_by_email(email)
@@ -81,9 +83,6 @@ def login_user():
                                                           "token": token}), 200)
                     else:
                         return Responses.bad_request({"Message": 'Wrong Password!'}), 404
-                else:
-                    if not password:
-                        return Responses.bad_request({"Message": 'Your password is missing!'}), 404
         return Responses.bad_request({"Message": 'Content-Type must be JSON.'}), 400
     except:
         return Responses.bad_request(
