@@ -18,7 +18,7 @@ def dbconn():
             db = 'test_andela'
         else:
             db='politico'
-        connection = psycopg2.connect(dbname=db, user='peshy', host='localhost', password='admin')
+        connection = psycopg2.connect(dbname=db, user='postgres', host='localhost', password='admin')
     except psycopg2.DatabaseError as e:
         try:
             if os.getenv('CONFIG_SETTING') == 'production':

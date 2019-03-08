@@ -3,8 +3,7 @@ from datetime import datetime, timedelta
 import jwt
 from flask import jsonify, current_app
 from app.api.routes.models.connection import CreateConnection
-import app.api.validations.validation as validate
-import app.api.responses as errors
+from app.api.validations.auth_validations import AuthValidations as validate
 
 
 

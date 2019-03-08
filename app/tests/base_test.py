@@ -1,14 +1,13 @@
-
 import unittest
 import sys  # fix import errors
 import os
 import json
 
 import psycopg2
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.api.app import create_app
 from app.api.database.db_conn import dbconn, drop_tables, create_tables
-
 
 
 class BaseTests(unittest.TestCase):
@@ -22,8 +21,8 @@ class BaseTests(unittest.TestCase):
         create_tables()
 
         self.add_party = json.dumps({
-            "name": "maendeleo",
-            "hqAddress": "kilimani",
+            "name": "chama cha vijana",
+            "hqAddress": "Mlolongo Estate",
             "logoUrl": "http://facebook.com/pic.jpg"
 
         })
@@ -52,19 +51,18 @@ class BaseTests(unittest.TestCase):
             "type": "senate"
         })
         self.length_name = json.dumps({
-            "name": "ertt",
-            "hqAddress": "koko",
+            "name": "chama",
+            "hqAddress": "Mlolongo Estate",
             "logoUrl": "http://facebook.com/pic.jpg"
-
         })
         self.length_hqAddress = json.dumps({
-            "name": "erttmommk",
-            "hqAddress": "koko",
+            "name": "chama cha vijana",
+            "hqAddress": "Mlol",
             "logoUrl": "http://facebook.com/pic.jpg"
         })
 
         self.length_type = json.dumps({
-            "name": "ertmoomot",
+            "name": "chama cha vijana",
             "type": "koko",
 
         })
@@ -72,16 +70,32 @@ class BaseTests(unittest.TestCase):
             "first_name": "peris",
             "last_name": "ndanu",
             "other_name": "kimeu",
-            "email": "ndani@gmail.com",
+            "email": "admin@gmail.com",
             "password": "South@frica12*",
             "phone_number": "45678",
             "passportUrl": "bujuu"
 
         }
-        self.login_user = {
+        self.register_user_extra = {
+            "first_name": "peris",
+            "last_name": "ndanu",
+            "other_name": "kimeu",
             "email": "ndani@gmail.com",
+            "password": "South@frica12*",
+            "phone_number": "45678",
+            "passportUrl": "bujuu",
+            "is_admin": "f",
+            "extra": "extra"
+
+        }
+        self.login_user = {
+            "email": "admin@gmail.com",
             "password": "South@frica12*"
 
+        }
+        self.wrong_passwrd = {
+            "email": "admin@gmail.com",
+            "password": "South@frica1"
         }
         self.missing_http = json.dumps({
             "name": "erttmommk",
@@ -111,11 +125,11 @@ class BaseTests(unittest.TestCase):
     def get_token(self):
         """this checks a user for login"""
         self.client.post('/api/v2/auth/signup', data=json.dumps(self.register_user),
-                           content_type='application/json',
-                           )
+                         content_type='application/json',
+                         )
         response = self.client.post('/api/v2/auth/login', data=json.dumps(self.login_user),
-                                      content_type='application/json',
-                                      )
+                                    content_type='application/json',
+                                    )
         self.assertEqual(response.status_code, 200)
         access_token = json.loads(response.data)['token']
         return access_token

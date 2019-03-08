@@ -40,6 +40,7 @@ class Responses:
         return response
 
 
+
 class AuthResponses:
     """For authentication with token"""
 
