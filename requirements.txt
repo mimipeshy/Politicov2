@@ -24,7 +24,7 @@ psycopg2==2.7.7
 psycopg2-binary==2.7.7
 py==1.7.0
 pycparser==2.19
-PyJWT==1.7.1
+PyJWT==2.4.0
 pytest==4.2.0
 pytest-cov==2.6.1
 python-dotenv==0.10.1
